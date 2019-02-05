@@ -93,7 +93,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                });
         });
 
-      //get data from order table
+      //get data from inventory table
         router.get("/inventory",function(req,res){
                        var query = "SELECT * FROM inventory";
                        connection.query(query,function(error,results){
@@ -137,14 +137,14 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 
     //get data from order table
         router.get("/order",function(req,res){
-                       var query = "SELECT * FROM order";
+                       var query = "SELECT * FROM order1";
                        connection.query(query,function(error,results){
                                if(error){
                                    res.json({
                                         "Error": true,
                                         "Msg": "Error Executing Mysql Query",
                                             });
-                                     Console.log(error);//logging error
+                                     console.log(error);//logging error
                                }else{
                                    res.json({
                                        "Error": false,
@@ -321,17 +321,21 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
               });
             });
 
+
             //insert into order data
-                 router.post("/inventory",function(req,res){
+                 router.post("/order",function(req,res){
                      var c={
-                     fk_retailer_id : req.body.fk_retailer_id,//here is the doubt is it foreign key?
-                     product_id : req.body.product_id,
-                     stock: req.body.stock,
-                     price: req.body.price,
-                     delivery:req.body.delivery,
+                     order_id : req.body.order_id,//here is the doubt is it foreign key?
+                     customer_id : req.body.customer_id,
+                     product_id: req.body.product_id,
+                     product_quantity: req.body.product_quantity,
+                     retailer_id: req.body.retailer_id,
+                     date: req.body.date,
+                     customer_otp :req.body.customer_otp,
+                     verified : req.body.verified,
                                  };
 
-                     var query ="INSERT INTO inventory SET ?";
+                     var query ="INSERT INTO order1 SET ?";
                      var table =[c];
                      query=mysql.format(query,table);
                      connection.query(query,function(error,results){
@@ -348,6 +352,66 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                  });}
                      });
                    });
+            //insert into product data
+                             router.post("/product",function(req,res){
+                                 var c={
+                                 product_id : req.body.product_id,//here is the doubt is it foreign key?
+                                 product_name : req.body.product_name,
+                                 product_price : req.body.product_price,
+                                 product_color : req.body.product_color,
+                                 product_warranty : req.body.product_warranty,
+                                 product_specification: req.body.product_specification,
+                                 fk_category_id : req.body.fk_category_id,
+                                 product_img    :   req.body.product_img,
+                                             };
+
+                                 var query ="INSERT INTO product SET ?";
+                                 var table =[c];
+                                 query=mysql.format(query,table);
+                                 connection.query(query,function(error,results){
+                                   if(error){
+                                              res.json({"error":true,
+                                                        "message":"error executing the mysql query"});
+                                             console.log(error);
+
+                                           } else {
+                                             res.json({
+                                               "error": false,
+                                               "message": "Success",
+                                               "Results": results
+                                             });}
+                                 });
+                               });
+
+             //insert into retailor data
+              router.post("/retailer",function(req,res){
+                             var c={
+                             retailer_id: req.body.retailer_id,
+                             retailer_email: req.body.retailer_email,
+                             retailer_password: req.body.product_name,
+                             retailer_name: req.body.retailer_name,
+                              retailer_city_id: req.body.retailer_city_id,
+                              retailer_mobile:req.body.retailer_mobile,
+                              retailer_pincode: req.body.retailer_pincode,
+                                             };
+
+                                 var query ="INSERT INTO retailer SET ?";
+                                 var table =[c];
+                                 query=mysql.format(query,table);
+                                 connection.query(query,function(error,results){
+                                   if(error){
+                                              res.json({"error":true,
+                                                        "message":"error executing the mysql query"});
+                                             console.log(error);
+
+                                           } else {
+                                             res.json({
+                                               "error": false,
+                                               "message": "Success",
+                                               "Results": results
+                                             });}
+                                 });
+                               });
                   //signup api
                  router.post("/signup",function(req,res){
                                       var c={
@@ -378,7 +442,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                   });}
                                       });
                                     });
-//                    login api
+                //login api
                  router.post("/login",function(req,res){
 
                                var  user_name = req.body.user_name;
