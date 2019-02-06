@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var md5 = require('md5');
+var cors= require('cors');
 function REST_ROUTER(router, connection, md5) {
   var self = this;
   self.handelRoutes(router, connection, md5);
