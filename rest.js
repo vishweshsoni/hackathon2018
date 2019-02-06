@@ -412,10 +412,37 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                              });}
                                  });
                                });
+
+                  //insert services data
+                 router.post("/services",function(req,res){
+                              var c={
+                              service_id: req.body.service_id,
+                              retailer_id: req.body.retailer_id,
+                              visiting_fees: req.body.visiting_fees,
+                              availability: req.body.availability,
+                               };
+                                 var query ="INSERT INTO service_man SET ?";
+                                  var table =[c];
+                                  query=mysql.format(query,table);
+                                  connection.query(query,function(error,results){
+                                    if(error){
+                                               res.json({"error":true,
+                                                         "message":"error executing the mysql query"});
+                                              console.log(error);
+
+                                            } else {
+                                              res.json({
+                                                "error": false,
+                                                "message": "Success",
+                                                "Results": results
+                                              });}
+                                  });
+                                });
+
                   //signup api
                  router.post("/signup",function(req,res){
                                       var c={
-                                      user_id : req.body.user_id,//here is the doubt is it foreign key?
+//                                      user_id : req.body.user_id,//here is the doubt is it foreign key?
                                       user_name : req.body.user_name,
                                       user_email : req.body.user_email,
                                       user_password : req.body.user_password,
@@ -484,7 +511,29 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                               }
                      });
                    });
-
+//                        //get service_man according to the pincode
+//                            router.post("/getservicesman",function(req,res){
+//                              var c={
+//                              retailer_pincode: req.body.retailer_pincode,
+//                              service_name : req.body.service_name,
+//                               };
+//               var query ="SELECT * FROM  retailer WHERE retailer_pincode = ? and retailer_id IN (SELECT retailer_id FROM service_man WHERE service_id IN (SELECT service_id FROM services WHERE service_name= “?”))";
+//                                  var table =[c];
+//                                  query=mysql.format(query,table);
+//                                  connection.query(query,function(error,results){
+//                                    if(error){
+//                                               res.json({"error":true,
+//                                                         "message":"error executing the mysql query"});
+//                                              console.log(error);
+//
+//                                            } else {
+//                                              res.json({
+//                                                "error": false,
+//                                                "message": "Success",
+//                                                "Results": results
+//                                              });}
+//                                  });
+//                                });
 
 
 

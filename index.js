@@ -44,7 +44,7 @@ REST.prototype.connectMysql =function(){
             }
 
         REST.prototype.startServer = function(){
-            app.listen(1337,function(){
+            app.listen(8100,function(){
                 console.log("All Right I'm Alive");
             });
         }
