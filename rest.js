@@ -231,15 +231,29 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                 });
                                          Console.log(error);//logging error
                                    }else{
-                                       res.json({
-                                           "Error": false,
-                                           "Message":"Success",
-                                           "Data":results
-
-                                       });
+                                       res.json(results);
                                    }
                            });
                     });
+
+                 router.get("/users/:id",function(req,res){
+                                            var query = "SELECT * FROM user WHERE user_id= ? ";
+                                            var table=[req.params.id];
+                                            query= mysql.format(query,table);
+                                            connection.query(query,function(error,results){
+                                                    if(error){
+                                                        res.json({
+                                                             "Error": true,
+                                                             "Msg": "Error Executing Mysql Query",
+                                                                 });
+                                                          Console.log(error);//logging error
+                                                    }else{
+                                                        res.json(results);
+                                                    }
+                                            });
+                                     });
+
+
 
       //Insert into category table
       router.post("/category",function(req,res){
@@ -539,15 +553,15 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 
 
                         //get service_man according to the pincode
-                           router.get("/getservicesman/:id/:pincoce/:cityid",function(req,res){
+                        router.get("/getservicesman/:id/:pincoce/:cityid",function(req,res){
 
 //                                var retailer_pincode= req.params.pincode;
 //                                var id = req.params.id;
 
-                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
-                                   var table=[req.params.id,req.params.pincoce,req.params.cityid];
-                                  query=mysql.format(query,table);
-                                  connection.query(query,function(error,results){
+                           var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
+                           var table=[req.params.id,req.params.pincoce,req.params.cityid];
+                           query=mysql.format(query,table);
+                           connection.query(query,function(error,results){
                                     if(error){
                                                res.json({"error":true,
                                                          "message":"error executing the mysql query"});
