@@ -252,6 +252,24 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                     }
                                             });
                                      });
+            //Put query of user for updation of user details
+
+            router.put("/users/:id",function(req,res){
+                               var query = "UPDATE user SET user_email= ?, user_name=?, user_phone=?, user_address=?,user_pincode=?  WHERE user_id =?";
+                                   var table=[req.body.user_email,req.body.user_name,req.body.user_phone,req.body.user_address,req.body.user_pincode,req.params.id];
+                                                        query= mysql.format(query,table);
+                                                        connection.query(query,function(error,results){
+                                                                if(error){
+                                                                    res.json({
+                                                                         "Error": true,
+                                                                         "Msg": "Error Executing Mysql Query",
+                                                                             });
+                                                                      console.log(error);//logging error
+                                                                }else{
+                                                                    res.json(results);
+                                                                }
+                                                        });
+                                                 });
 
 
 
@@ -487,10 +505,10 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                 //login api
                  router.post("/login",function(req,res){
 
-                               var  user_name = req.body.user_name;
+                                    var  user_email = req.body.user_email;
                                  var user_password = req.body.user_password;
-                     var query ="SELECT * FROM user WHERE user_name = ?";
-                     var table =[user_name];
+                     var query ="SELECT * FROM user WHERE user_email=? AND user_password=?";
+                     var table =[user_email,user_password];
                      query=mysql.format(query,table);
                      connection.query(query,function(error,results){
                        if(error){
@@ -499,30 +517,30 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                  console.log(error);
 
                                }
-                        else {
-                                       if(results.length>0){
-                                            if(results[0].user_password == user_password){
-                                                res.json({
-                                                    "error" : false,
-                                                    "message" : "Successfully Authentic",
-                                                     "result" : results
-                                                });
-
-                                            }
-                                            else{
-                                                res.json({
-                                                        "error": true,
-                                                         "Message": "Email and password does not match",
-                                                    });
-
-                                            }
-                                        }else{
-                                            res.json({
-                                                "error" : true,
-                                                "Message" : "Email doesnot exist",
-
-                                            });
-                                        }
+                        else {      res.json(results);
+//                                       if(results.length>0){
+//                                            if(results[0].user_password == user_password){
+//                                                res.json({
+//                                                    "error" : false,
+//                                                    "message" : "Successfully Authentic",
+//                                                     "result" : results
+//                                                });
+//
+//                                            }
+//                                            else{
+//                                                res.json({
+//                                                        "error": true,
+//                                                         "Message": "Email and password does not match",
+//                                                    });
+//
+//                                            }
+//                                        }else{
+//                                            res.json({
+//                                                "error" : true,
+//                                                "Message" : "Email doesnot exist",
+//
+//                                            });
+//                                        }
                               }
                      });
                    });
