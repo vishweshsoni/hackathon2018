@@ -3,7 +3,13 @@ const mysql =require('mysql');
 const express= require('express');
 const fs= require('fs');
 const rest=require('./rest.js');
+var cors= require('cors');
 var app=express();
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 const bodyparser = require("body-parser");
 const hostname = '127.0.0.1';
 function REST(){
@@ -44,7 +50,7 @@ REST.prototype.connectMysql =function(){
             }
 
         REST.prototype.startServer = function(){
-            app.listen(1337,function(){
+            app.listen(8110,function(){
                 console.log("All Right I'm Alive");
             });
         }
