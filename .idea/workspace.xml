@@ -37,8 +37,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="255" selection-start-line="255" selection-end-line="255" />
+            <state relative-caret-position="117">
+              <caret line="257" column="117" selection-start-line="257" selection-start-column="117" selection-end-line="257" selection-end-column="117" />
             </state>
           </provider>
         </entry>
@@ -51,7 +51,12 @@
       <find>servic</find>
       <find>user</find>
       <find>users</find>
+      <find>signup</find>
+      <find>sign</find>
+      <find>signup/:id</find>
       <find>users/:</find>
+      <find>login</find>
+      <find>users/</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -190,13 +195,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="third commit" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="52" column="25" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -207,10 +205,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="52" column="25" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rest.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="255" selection-start-line="255" selection-end-line="255" />
+        <state relative-caret-position="117">
+          <caret line="257" column="117" selection-start-line="257" selection-start-column="117" selection-end-line="257" selection-end-column="117" />
         </state>
       </provider>
     </entry>
