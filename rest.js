@@ -267,6 +267,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                                       console.log(error);//logging error
                                                                 }else{
                                                                     res.json(results);
+
                                                                 }
                                                         });
                                                  });
