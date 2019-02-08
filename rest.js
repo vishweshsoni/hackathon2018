@@ -266,6 +266,25 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                     }
                                             });
                                      });
+              //past records
+                  router.get("/pastrecords/:id",function(req,res){
+                                  var query="select * from order1 where verified=1 and customer_id=? ";
+                                  var table=[req.params.id];
+                                  query=mysql.format(query,table);
+                                  connection.query(query,function(error,results){
+                                    if(error){
+                                      res.json({
+                                        "Error":true,
+                                      "Msg":"Error Executing Mysql Query",
+                                      });
+                                      console.log("error");
+                                    }else{
+                                      res.json(results);
+                                    }
+                                  });
+                  });
+
+                              
             //Put query of user for updation of user details
 
             router.put("/users/:id",function(req,res){
@@ -560,13 +579,15 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                      });
                    });
                         //get service_man  with different area and in the ahmedabad according to the pincode
-                           router.get("/getservicesman1/:id/:pincode/:serviceid",function(req,res){
+                        //pass first cityid second pincode third  serviceid
+                           router.get("/getservicesman1/:id/:pincoce/:serviceid",function(req,res){
 
 //                                var retailer_pincode= req.params.pincode;
 //                                var id = req.params.id;
 
-                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode <>? AND sm.availability = 1 AND r.retailer_city_id = ? GROUP BY r.retailer_id";
-                                   var table=[req.params.serviceid,req.params.id,req.params.serviceid];
+                              //  var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode = ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
+                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode <> ? AND sm.availability = 1 AND r.retailer_city_id = ? GROUP BY r.retailer_id";
+                                   var table=[req.params.serviceid,req.params.pincoce,req.params.id];
                                   query=mysql.format(query,table);
                                   connection.query(query,function(error,results){
                                     if(error){
