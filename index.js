@@ -50,43 +50,10 @@ REST.prototype.connectMysql =function(){
             }
 
         REST.prototype.startServer = function(){
-            app.listen(3000,function(){
+            app.listen(8110,function(){
                 console.log("All Right I'm Alive");
             });
         }
 
  new REST();
 
-//
-////creating connection to the database
-//connection.connect();
-////function index(request,response) {
-////  response.writeHead(200);
-////  response.end('Hello world');
-////}
-//
-//http.createServer(function(request,response) {
-//  if(request.url in routes){
-//    return routes[request.url](request,response);
-//  }
-//    response.writeHead(404);
-//    response.end(http.STATUS_CODES[404]);
-//}).listen(1337);
-//
-//var routes={
-//    //Hello World Simple testing
-//  '/':function index(req,res) {
-//    res.writeHead(200);
-//    res.end('Hello,world');
-//
-//  },
-//  '/foo':function foo(request,response) {
-//    response.writeHead(200);
-//
-//        },
-//    '/catagory':function catagory_response(req,res){
-//        res.writeHead(200);
-//        var
-//
-//        }
-//    };

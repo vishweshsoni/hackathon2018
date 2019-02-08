@@ -512,29 +512,29 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                               }
                      });
                    });
-//                        //get service_man according to the pincode
-//                            router.post("/getservicesman",function(req,res){
-//                              var c={
-//                              retailer_pincode: req.body.retailer_pincode,
-//                              service_name : req.body.service_name,
-//                               };
-//               var query ="SELECT * FROM  retailer WHERE retailer_pincode = ? and retailer_id IN (SELECT retailer_id FROM service_man WHERE service_id IN (SELECT service_id FROM services WHERE service_name= “?”))";
-//                                  var table =[c];
-//                                  query=mysql.format(query,table);
-//                                  connection.query(query,function(error,results){
-//                                    if(error){
-//                                               res.json({"error":true,
-//                                                         "message":"error executing the mysql query"});
-//                                              console.log(error);
-//
-//                                            } else {
-//                                              res.json({
-//                                                "error": false,
-//                                                "message": "Success",
-//                                                "Results": results
-//                                              });}
-//                                  });
-//                                });
+                        //get service_man according to the pincode
+                           router.get("/getservicesman/:id/:pincoce",function(req,res){
+
+//                                var retailer_pincode= req.params.pincode;
+//                                var id = req.params.id;
+
+                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode = ? AND sm.availability = 1 GROUP BY r.retailer_id";
+                                   var table=[req.params.id,req.params.pincoce];
+                                  query=mysql.format(query,table);
+                                  connection.query(query,function(error,results){
+                                    if(error){
+                                               res.json({"error":true,
+                                                         "message":"error executing the mysql query"});
+                                              console.log(error);
+
+                                            } else {
+                                              res.json({
+                                                "error": false,
+                                                "message": "Success",
+                                                "Results": results
+                                              });}
+                                  });
+                                });
 
 
 
