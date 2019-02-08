@@ -53,26 +53,26 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
             });
 
      });
-    //get data from inventory table
-    router.get("/inventory",function(req,res){
-           var query = "SELECT * FROM inventory";
-           connection.query(query,function(error,results){
-                   if(error){
-                       res.json({
-                            "Error": true,
-                            "Msg": "Error Executing Mysql Query",
-                                });
-                         Console.log(error);//logging error
-                   }else{
-                       res.json({
-                           "Error": false,
-                           "Message":"Success",
-                           "Data":results
-
-                       });
-                   }
-           });
-    });
+//    //get data from inventory table
+//    router.get("/inventory",function(req,res){
+//           var query = "SELECT * FROM inventory";
+//           connection.query(query,function(error,results){
+//                   if(error){
+//                       res.json({
+//                            "Error": true,
+//                            "Msg": "Error Executing Mysql Query",
+//                                });
+//                         Console.log(error);//logging error
+//                   }else{
+//                       res.json({
+//                           "Error": false,
+//                           "Message":"Success",
+//                           "Data":results
+//
+//                       });
+//                   }
+//           });
+//    });
     //get data from order table
     router.get("/feedback",function(req,res){
                var query = "SELECT * FROM feedback";
@@ -94,25 +94,39 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                });
         });
 
-      //get data from inventory table
-        router.get("/inventory",function(req,res){
-                       var query = "SELECT * FROM inventory";
-                       connection.query(query,function(error,results){
-                               if(error){
-                                   res.json({
-                                        "Error": true,
-                                        "Msg": "Error Executing Mysql Query",
-                                            });
-                                     Console.log(error);//logging error
-                               }else{
-                                   res.json({
-                                       "Error": false,
-                                       "Message":"Success",
-                                       "Data":results
+//      get data from inventory table
+        router.get("/inventory/:id?",function(req,res){
+                if(req.params.id){
+                               var query = "select * from inventory as i join retailer as r on i.fk_retailer_id=r.retailer_id where product_id = ?";
+                               var table=[req.params.id];
+                               query =mysql.format(query,table);
+                                             connection.query(query,function(error,results){
+                                                     if(error){
+                                                         res.json({
+                                                              "Error": true,
+                                                              "Msg": "Error Executing Mysql Query",
+                                                                  });
+                                                           console.log(error);//logging error
+                                                     }else{
+                                                         res.json(results);
+                                                     }
+                        });
 
-                                   });
-                               }
-                       });
+                        }
+                else{
+                 var query = "SELECT * FROM inventory";
+                    connection.query(query,function(error,results){
+                            if(error){
+                                   res.json({
+                                            "Error": true,
+                                         "Msg": "Error Executing Mysql Query",
+                                     });
+                             console.log(error);//logging error
+                                                     }else{
+                                                         res.json(results);
+                                                     }
+                                             });
+                                             }
                 });
       //get data from product table
         router.get("/product",function(req,res){
@@ -328,32 +342,32 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 
 
       //insert into inventory data
-      router.post("/inventory",function(req,res){
-              var c={
-              fk_retailer_id : req.body.fk_retailer_id,//here is the doubt is it foreign key?
-              product_id : req.body.product_id,
-              stock: req.body.stock,
-              price: req.body.price,
-              delivery:req.body.delivery,
-                          };
-
-              var query ="INSERT INTO inventory SET ?";
-              var table =[c];
-              query=mysql.format(query,table);
-              connection.query(query,function(error,results){
-                if(error){
-                           res.json({"error":true,
-                                     "message":"error executing the mysql query"});
-                          console.log(error);
-
-                        } else {
-                          res.json({
-                            "error": false,
-                            "message": "Success",
-                            "users": results
-                          });}
-              });
-            });
+//      router.post("/inventory",function(req,res){
+//              var c={
+//              fk_retailer_id : req.body.fk_retailer_id,//here is the doubt is it foreign key?
+//              product_id : req.body.product_id,
+//              stock: req.body.stock,
+//              price: req.body.price,
+//              delivery:req.body.delivery,
+//                          };
+//
+//              var query ="INSERT INTO inventory SET ?";
+//              var table =[c];
+//              query=mysql.format(query,table);
+//              connection.query(query,function(error,results){
+//                if(error){
+//                           res.json({"error":true,
+//                                     "message":"error executing the mysql query"});
+//                          console.log(error);
+//
+//                        } else {
+//                          res.json({
+//                            "error": false,
+//                            "message": "Success",
+//                            "users": results
+//                          });}
+//              });
+//            });
 
 
             //insert into order data
@@ -546,13 +560,13 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                      });
                    });
                         //get service_man  with different area and in the ahmedabad according to the pincode
-                           router.get("/getservicesman1/:id/:pincoce/:serviceid",function(req,res){
+                           router.get("/getservicesman1/:id/:pincode/:serviceid",function(req,res){
 
 //                                var retailer_pincode= req.params.pincode;
 //                                var id = req.params.id;
 
-                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id = ? GROUP BY r.retailer_id";
-                                   var table=[req.params.id,req.params.pincoce];
+                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode <>? AND sm.availability = 1 AND r.retailer_city_id = ? GROUP BY r.retailer_id";
+                                   var table=[req.params.serviceid,req.params.id,req.params.serviceid];
                                   query=mysql.format(query,table);
                                   connection.query(query,function(error,results){
                                     if(error){
@@ -577,7 +591,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 //                                var retailer_pincode= req.params.pincode;
 //                                var id = req.params.id;
 
-                           var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
+                           var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode = ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
                            var table=[req.params.id,req.params.pincoce,req.params.cityid];
                            query=mysql.format(query,table);
                            connection.query(query,function(error,results){
@@ -594,6 +608,83 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                               });}
                                   });
                                 });
+
+//        Malav routes start from here
+        router.get('/product/:id?/:pin?',function(req,res){
+                if(req.params.pin){
+
+
+//                                    console.log(req.params.id);
+//                                    console.log(req.params.pin);
+
+var query = "select pro.*,Another.counts as counts from product as pro join(select count(*) as counts from inventory as i JOIN product as p on p.product_id=i.product_id join retailer as r on r.retailer_id = i.fk_retailer_id join category as c on c.category_id = p.fk_category_id where r.retailer_city_id= ? and i.stock > 0 and c.fk_cat_id = ?) as Another where pro.fk_category_id IN (select category_id from category where category.fk_cat_id = ?)"
+
+var table=[req.params.pin,req.params.id,req.params.id];
+
+                                                       query=mysql.format(query,table);
+                                                       connection.query(query,function(error,results){
+                                                                if(error){
+                                                                           res.json({"error":true,
+                                                                                     "message":"error executing the mysql query"});
+                                                                          console.log(error);
+
+                                                                        } else {
+
+                                                                          res.json(results);
+                                                                            }
+                                                              });
+                    }
+                    else{
+                        var query ="select * from category";
+
+                        query=mysql.format(query);
+                        connection.query(query,function(error,results){
+                        if(error){
+                            res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                                    console.log(error);
+                                } else {
+                                        res.json(results);
+                                         }
+                                    });
+                     }
+        });
+        router.get("/city",function(req,res){
+
+                                   var query ="select * from city";
+
+//                                   query=mysql.format(query,table);
+                                   connection.query(query,function(error,results){
+                                            if(error){
+                                                       res.json({"error":true,
+                                                                 "message":"error executing the mysql query"});
+                                                      console.log(error);
+
+                                                    } else {
+                                                      res.json({
+                                                        "error": false,
+                                                        "message": "Success",
+                                                        "Results": results
+                                                      });}
+                                          });
+                                        });
+    router.put("/city/:id",function(req,res){
+
+                                       var query ="update user set user_city_id=? where user_id=?";
+                                         var table=[req.body.user_city_id,req.params.id];
+                                       query=mysql.format(query,table);
+                                       connection.query(query,function(error,results){
+                                                if(error){
+                                                           res.json({"error":true,
+                                                                     "message":"error executing the mysql query"});
+                                                          console.log(error);
+
+                                                        } else {
+                                                          res.json(results);
+                                                          }
+                                              });
+                                            });
+
 
 
 
