@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4f6cd4b6-3d54-4f37-b264-7cec2da9451d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hackathon2018" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/cors/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/cors/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/object-assign/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/object-assign/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rest.js" beforeDir="false" afterPath="$PROJECT_DIR$/rest.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,8 +43,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rest.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="675" column="57" lean-forward="true" selection-start-line="675" selection-start-column="57" selection-end-line="675" selection-end-column="57" />
+            <state relative-caret-position="146">
+              <caret line="573" column="46" lean-forward="true" selection-start-line="573" selection-start-column="46" selection-end-line="573" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -72,6 +78,7 @@
         <option value="vishwesh &lt;vishweshsoni@gmail.com&gt;" />
       </list>
     </option>
+    <option name="ROOT_SYNC" value="SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
@@ -144,7 +151,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="727" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49456522" visible="true" weight="0.24944155" />
       <window_info id="Structure" order="1" sideWeight="0.5054348" side_tool="true" visible="true" weight="0.24944155" />
@@ -235,8 +241,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rest.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="675" column="57" lean-forward="true" selection-start-line="675" selection-start-column="57" selection-end-line="675" selection-end-column="57" />
+        <state relative-caret-position="146">
+          <caret line="573" column="46" lean-forward="true" selection-start-line="573" selection-start-column="46" selection-end-line="573" selection-end-column="46" />
         </state>
       </provider>
     </entry>
