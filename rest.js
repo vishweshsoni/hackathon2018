@@ -805,8 +805,42 @@ var table=[req.params.pin,req.params.id,req.params.id];
                              }
                  });
                });
+               //Zeel Pending api
+        router.get("/pendingorder/:cid",function(req,res){
+              var query ="select * from order1 where customer_id=? and verified=1 and varified_by_retailer=0";
+              // SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1
+              var table=[req.params.cid];
+              query= mysql.format(query,table);
+              connection.query(query,function(error,results){
+                if(error){
+                           res.json({"error":true,
+                                     "message":"error executing the mysql query"});
+                          console.log(error);
 
+                        } else {
+                          res.json(results);
+                          }
+              });
 
+        });
+        //Zeel admin side get retailor's past order
+        router.get("/pastretailor/:rid",function(req,res){
+          var query ="SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1 and o.retailer_id=?";
+          var table=[req.params.rid];
+          query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                      res.json(results);
+                      }
+          });
+
+    });
+    
 
       }
 module.exports = REST_ROUTER;
