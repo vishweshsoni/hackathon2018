@@ -231,15 +231,48 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                 });
                                          Console.log(error);//logging error
                                    }else{
-                                       res.json({
-                                           "Error": false,
-                                           "Message":"Success",
-                                           "Data":results
-
-                                       });
+                                       res.json(results);
                                    }
                            });
                     });
+
+                 router.get("/users/:id",function(req,res){
+                                            var query = "SELECT * FROM user WHERE user_id= ? ";
+                                            var table=[req.params.id];
+                                            query= mysql.format(query,table);
+                                            connection.query(query,function(error,results){
+                                                    if(error){
+                                                        res.json({
+                                                             "Error": true,
+                                                             "Msg": "Error Executing Mysql Query",
+                                                                 });
+                                                          Console.log(error);//logging error
+                                                    }else{
+                                                        res.json(results);
+                                                    }
+                                            });
+                                     });
+            //Put query of user for updation of user details
+
+            router.put("/users/:id",function(req,res){
+                               var query = "UPDATE user SET user_email= ?, user_name=?, user_phone=?, user_address=?,user_pincode=?  WHERE user_id =?";
+                                   var table=[req.body.user_email,req.body.user_name,req.body.user_phone,req.body.user_address,req.body.user_pincode,req.params.id];
+                                                        query= mysql.format(query,table);
+                                                        connection.query(query,function(error,results){
+                                                                if(error){
+                                                                    res.json({
+                                                                         "Error": true,
+                                                                         "Msg": "Error Executing Mysql Query",
+                                                                             });
+                                                                      console.log(error);//logging error
+                                                                }else{
+                                                                    res.json(results);
+
+                                                                }
+                                                        });
+                                                 });
+
+
 
       //Insert into category table
       router.post("/category",function(req,res){
@@ -473,10 +506,10 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                 //login api
                  router.post("/login",function(req,res){
 
-                               var  user_name = req.body.user_name;
+                                    var  user_email = req.body.user_email;
                                  var user_password = req.body.user_password;
-                     var query ="SELECT * FROM user WHERE user_name = ?";
-                     var table =[user_name];
+                     var query ="SELECT * FROM user WHERE user_email=? AND user_password=?";
+                     var table =[user_email,user_password];
                      query=mysql.format(query,table);
                      connection.query(query,function(error,results){
                        if(error){
@@ -485,43 +518,69 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                  console.log(error);
 
                                }
-                        else {
-                                       if(results.length>0){
-                                            if(results[0].user_password == user_password){
-                                                res.json({
-                                                    "error" : false,
-                                                    "message" : "Successfully Authentic",
-                                                     "result" : results
-                                                });
-
-                                            }
-                                            else{
-                                                res.json({
-                                                        "error": true,
-                                                         "Message": "Email and password does not match",
-                                                    });
-
-                                            }
-                                        }else{
-                                            res.json({
-                                                "error" : true,
-                                                "Message" : "Email doesnot exist",
-
-                                            });
-                                        }
+                        else {      res.json(results);
+//                                       if(results.length>0){
+//                                            if(results[0].user_password == user_password){
+//                                                res.json({
+//                                                    "error" : false,
+//                                                    "message" : "Successfully Authentic",
+//                                                     "result" : results
+//                                                });
+//
+//                                            }
+//                                            else{
+//                                                res.json({
+//                                                        "error": true,
+//                                                         "Message": "Email and password does not match",
+//                                                    });
+//
+//                                            }
+//                                        }else{
+//                                            res.json({
+//                                                "error" : true,
+//                                                "Message" : "Email doesnot exist",
+//
+//                                            });
+//                                        }
                               }
                      });
                    });
-                        //get service_man according to the pincode
-                           router.get("/getservicesman/:id/:pincoce",function(req,res){
+                        //get service_man  with different area and in the ahmedabad according to the pincode
+                           router.get("/getservicesman1/:id/:pincoce/:serviceid",function(req,res){
 
 //                                var retailer_pincode= req.params.pincode;
 //                                var id = req.params.id;
 
-                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode = ? AND sm.availability = 1 GROUP BY r.retailer_id";
+                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id = ? GROUP BY r.retailer_id";
                                    var table=[req.params.id,req.params.pincoce];
                                   query=mysql.format(query,table);
                                   connection.query(query,function(error,results){
+                                    if(error){
+                                               res.json({"error":true,
+                                                         "message":"error executing the mysql query"});
+                                              console.log(error);
+
+                                            } else {
+                                              res.json({
+                                                "error": false,
+                                                "message": "Success",
+                                                "Results": results
+                                              });}
+                                  });
+                                });
+
+
+
+                        //get service_man according to the pincode
+                        router.get("/getservicesman/:id/:pincoce/:cityid",function(req,res){
+
+//                                var retailer_pincode= req.params.pincode;
+//                                var id = req.params.id;
+
+                           var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
+                           var table=[req.params.id,req.params.pincoce,req.params.cityid];
+                           query=mysql.format(query,table);
+                           connection.query(query,function(error,results){
                                     if(error){
                                                res.json({"error":true,
                                                          "message":"error executing the mysql query"});
