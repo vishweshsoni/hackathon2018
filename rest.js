@@ -546,13 +546,15 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                      });
                    });
                         //get service_man  with different area and in the ahmedabad according to the pincode
+                        //pass first cityid second pincode third  serviceid
                            router.get("/getservicesman1/:id/:pincoce/:serviceid",function(req,res){
 
 //                                var retailer_pincode= req.params.pincode;
 //                                var id = req.params.id;
 
-                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id = ? GROUP BY r.retailer_id";
-                                   var table=[req.params.id,req.params.pincoce];
+                              //  var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode = ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
+                                var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode <> ? AND sm.availability = 1 AND r.retailer_city_id = ? GROUP BY r.retailer_id";
+                                   var table=[req.params.serviceid,req.params.pincoce,req.params.id];
                                   query=mysql.format(query,table);
                                   connection.query(query,function(error,results){
                                     if(error){
@@ -577,7 +579,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 //                                var retailer_pincode= req.params.pincode;
 //                                var id = req.params.id;
 
-                           var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode != ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
+                           var query ="SELECT r.* FROM retailer r,services s,service_man sm WHERE sm.service_id = ? AND sm.retailer_id = r.retailer_id AND r.retailer_pincode = ? AND sm.availability = 1 AND r.retailer_city_id=? GROUP BY r.retailer_id";
                            var table=[req.params.id,req.params.pincoce,req.params.cityid];
                            query=mysql.format(query,table);
                            connection.query(query,function(error,results){
