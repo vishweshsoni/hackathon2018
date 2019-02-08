@@ -14,7 +14,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
     });
      //get data of category table
      router.get("/category",function(req,res){
-            var query = "SELECT * FROM category";
+            var query = "SELECT * FROM category ";
             connection.query(query,function(error,results){
                     if(error){
                         res.json({
@@ -656,7 +656,7 @@ var table=[req.params.pin,req.params.id,req.params.id];
                                                               });
                     }
                     else{
-                        var query ="select * from category";
+                        var query ="select * from category where fk_cat_id=0";
 
                         query=mysql.format(query);
                         connection.query(query,function(error,results){
@@ -719,8 +719,75 @@ var table=[req.params.pin,req.params.id,req.params.id];
                            res.json(results);
                            }
                });
-             });;
-        
+             });
+             //Zeel Admin site zeelgetmanservice
+
+        router.post("/zeelgetserviceman",function(req,res){
+          var c={
+              //reatailer
+              //serviceman
+              retailer_id: req.body.retailer_id,
+              retailer_email:req.body.retailer_email,
+              retailer_password:req.body.retailer_password,
+              retailer_name:req.body.retailer_name,
+              retailer_city_id: req.body.retailer_city_id,
+              retailer_mobile:req.body.retailer_mobile,
+              retailer_pincode: req.body.retailer_pincode,
+
+          };
+          var query="insert into retailer set ?";
+          var table=[c];
+          query=mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                         c={
+                          service_id:req.body.service_id,
+                          retailer_id:req.body.retailer_id,
+                          visiting_fees:req.body.visiting_fees,
+                          availability: req.body.availability,};
+
+                          query ="insert into service_man set ?";
+                          table=[c];
+                          query=mysql.format(query,c);
+
+                          connection.query(query,function(error,results1){
+                              if(error){
+                                res.json({"error":true,
+                                "message":"error executing the mysql query"});
+                                console.log(error);
+                              }else{
+                                  res.json(results1);
+                              }
+                          });
+                      }
+          });
+
+        });
+        //Zeel Login api
+        router.post("/zeellogin",function(req,res){
+            var c={
+                retailer_email:req.body.retailer_email,
+                retailer_password: req.body.retailer_password
+            };
+
+          var query ="select * from city order by city_name";
+          connection.query(query,function(error,results){
+                   if(error){
+                              res.json({"error":true,
+                                        "message":"error executing the mysql query"});
+                             console.log(error);
+  
+                           } else {
+                             res.json(results);
+                             }
+                 });
+               });
+
 
 
       }
