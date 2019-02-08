@@ -301,7 +301,27 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                                       console.log(error);//logging error
                                                                 }else{
                                                                     res.json(results);
+                                                                }
+                                                        });
+                                                 });
 
+		//change password of user
+		
+			 router.put("/change/:id",function(req,res){
+                               var query = "UPDATE user SET user_password= ? , user_email=? WHERE user_id =?";
+							   console.log(req.body);
+							   console.log(req.params.id);
+                                   var table=[req.body.user_password,req.body.user_email,req.params.id];
+                                                        query= mysql.format(query,table);
+                                                        connection.query(query,function(error,results){
+                                                                if(error){
+                                                                    res.json({
+                                                                         "Error": true,
+                                                                         "Msg": "Error Executing Mysql Query",
+                                                                             });
+                                                                      console.log(error);//logging error
+                                                                }else{
+                                                                    res.json(results);
                                                                 }
                                                         });
                                                  });
@@ -638,12 +658,15 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 //                                    console.log(req.params.id);
 //                                    console.log(req.params.pin);
 
-var query = "select pro.*,Another.counts as counts from product as pro join(select count(*) as counts from inventory as i JOIN product as p on p.product_id=i.product_id join retailer as r on r.retailer_id = i.fk_retailer_id join category as c on c.category_id = p.fk_category_id where r.retailer_city_id= ? and i.stock > 0 and c.fk_cat_id = ?) as Another where pro.fk_category_id IN (select category_id from category where category.fk_cat_id = ?)"
+//var query = "select pro.*,Another.counts as counts from product as pro join(select count(*) as counts from inventory as i JOIN product as p on p.product_id=i.product_id join retailer as r on r.retailer_id = i.fk_retailer_id join category as c on c.category_id = p.fk_category_id where r.retailer_city_id= ? and i.stock > 0 and c.fk_cat_id = ?) as Another where pro.fk_category_id IN (select category_id from category where category.fk_cat_id = ?)"
+var query="select pro.*,Another.counts as counts from product as pro join inventory as i on pro.product_id=i.product_id join category as c on c.category_id=pro.fk_category_id join retailer as r on r.retailer_id=i.fk_retailer_id join city as cs on cs.city_id=r.retailer_city_id join (select count(*) as counts from category where category.fk_cat_id=?) as Another where c.fk_cat_id=? and r.retailer_city_id=? and i.stock>0";
+var table=[req.params.id,req.params.id,req.params.pin];
 
-var table=[req.params.pin,req.params.id,req.params.id];
 
-                                                       query=mysql.format(query,table);
-                                                       connection.query(query,function(error,results){
+                   
+query=mysql.format(query,table);
+console.log(query);
+connection.query(query,function(error,results){
                                                                 if(error){
                                                                            res.json({"error":true,
                                                                                      "message":"error executing the mysql query"});
