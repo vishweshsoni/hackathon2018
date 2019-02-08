@@ -130,7 +130,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                 });
       //get data from product table
         router.get("/product",function(req,res){
-                       var query = "SELECT * FROM product";
+                       var query = "SELECT * FROM category";
                        connection.query(query,function(error,results){
                                if(error){
                                    res.json({
