@@ -705,6 +705,21 @@ var table=[req.params.pin,req.params.id,req.params.id];
                                                           }
                                               });
                                             });
+       //jainam's city orderby name
+       router.get("/cityo",function(req,res){
+
+        var query ="select * from city order by city_name";
+        connection.query(query,function(error,results){
+                 if(error){
+                            res.json({"error":true,
+                                      "message":"error executing the mysql query"});
+                           console.log(error);
+
+                         } else {
+                           res.json(results);
+                           }
+               });
+             });
 
 
 
