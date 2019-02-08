@@ -130,25 +130,25 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                              }
                 });
       //get data from product table
-        router.get("/product",function(req,res){
-                       var query = "SELECT * FROM category";
-                       connection.query(query,function(error,results){
-                               if(error){
-                                   res.json({
-                                        "Error": true,
-                                        "Msg": "Error Executing Mysql Query",
-                                            });
-                                     Console.log(error);//logging error
-                               }else{
-                                   res.json({
-                                       "Error": false,
-                                       "Message":"Success",
-                                       "Data":results
+        // router.get("/product",function(req,res){
+        //                var query = "SELECT * FROM product";
+        //                connection.query(query,function(error,results){
+        //                        if(error){
+        //                            res.json({
+        //                                 "Error": true,
+        //                                 "Msg": "Error Executing Mysql Query",
+        //                                     });
+        //                              Console.log(error);//logging error
+        //                        }else{
+        //                            res.json({
+        //                                "Error": false,
+        //                                "Message":"Success",
+        //                                "Data":results
 
-                                   });
-                               }
-                       });
-                });
+        //                            });
+        //                        }
+        //                });
+        //         });
 
 
     //get data from order table
@@ -658,12 +658,15 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 //                                    console.log(req.params.id);
 //                                    console.log(req.params.pin);
 
-var query = "select pro.*,Another.counts as counts from product as pro join(select count(*) as counts from inventory as i JOIN product as p on p.product_id=i.product_id join retailer as r on r.retailer_id = i.fk_retailer_id join category as c on c.category_id = p.fk_category_id where r.retailer_city_id= ? and i.stock > 0 and c.fk_cat_id = ?) as Another where pro.fk_category_id IN (select category_id from category where category.fk_cat_id = ?)"
+//var query = "select pro.*,Another.counts as counts from product as pro join(select count(*) as counts from inventory as i JOIN product as p on p.product_id=i.product_id join retailer as r on r.retailer_id = i.fk_retailer_id join category as c on c.category_id = p.fk_category_id where r.retailer_city_id= ? and i.stock > 0 and c.fk_cat_id = ?) as Another where pro.fk_category_id IN (select category_id from category where category.fk_cat_id = ?)"
+var query="select pro.*,Another.counts as counts from product as pro join inventory as i on pro.product_id=i.product_id join category as c on c.category_id=pro.fk_category_id join retailer as r on r.retailer_id=i.fk_retailer_id join city as cs on cs.city_id=r.retailer_city_id join (select count(*) as counts from category where category.fk_cat_id=?) as Another where c.fk_cat_id=? and r.retailer_city_id=? and i.stock>0";
+var table=[req.params.id,req.params.id,req.params.pin];
 
-var table=[req.params.pin,req.params.id,req.params.id];
 
-                                                       query=mysql.format(query,table);
-                                                       connection.query(query,function(error,results){
+                   
+query=mysql.format(query,table);
+console.log(query);
+connection.query(query,function(error,results){
                                                                 if(error){
                                                                            res.json({"error":true,
                                                                                      "message":"error executing the mysql query"});
@@ -825,8 +828,42 @@ var table=[req.params.pin,req.params.id,req.params.id];
                              }
                  });
                });
+               //Zeel Pending api
+        router.get("/pendingorder/:cid",function(req,res){
+              var query ="select * from order1 where customer_id=? and verified=1 and varified_by_retailer=0";
+              // SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1
+              var table=[req.params.cid];
+              query= mysql.format(query,table);
+              connection.query(query,function(error,results){
+                if(error){
+                           res.json({"error":true,
+                                     "message":"error executing the mysql query"});
+                          console.log(error);
 
+                        } else {
+                          res.json(results);
+                          }
+              });
 
+        });
+        //Zeel admin side get retailor's past order
+        router.get("/pastretailor/:rid",function(req,res){
+          var query ="SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1 and o.retailer_id=?";
+          var table=[req.params.rid];
+          query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                      res.json(results);
+                      }
+          });
+
+    });
+    
 
       }
 module.exports = REST_ROUTER;
