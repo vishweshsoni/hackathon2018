@@ -269,7 +269,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                      });
               //past records
                   router.get("/pastrecords/:id",function(req,res){
-                                  var query="select * from order1 where verified=1 and customer_id=? ";
+  var query="select p.product_name,p.product_img,p.product_price * o.product_quantity,o.*,u.user_id from product p, order1 o,user u where customer_id = ? and o.product_id=p.product_id and u.user_id = o.customer_id";
                                   var table=[req.params.id];
                                   query=mysql.format(query,table);
                                   connection.query(query,function(error,results){
