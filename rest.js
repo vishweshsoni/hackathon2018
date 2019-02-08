@@ -1,3 +1,4 @@
+var otpGenerator = require('otp-generator');
 var mysql = require("mysql");
 var md5 = require('md5');
 var cors= require('cors');
@@ -390,17 +391,28 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
 
 
             //insert into order data
-                 router.post("/order",function(req,res){
-                     var c={
-                     order_id : req.body.order_id,//here is the doubt is it foreign key?
-                     customer_id : req.body.customer_id,
-                     product_id: req.body.product_id,
-                     product_quantity: req.body.product_quantity,
-                     retailer_id: req.body.retailer_id,
-                     date: req.body.date,
-                     customer_otp :req.body.customer_otp,
-                     verified : req.body.verified,
-                                 };
+                 router.post("/product",function(req,res){
+                     
+                                 var otp=otpGenerator.generate(6, { upperCase: false, specialChars: false,alphabets:false });
+                                 console.log(otp);
+                                 var c={
+                                  order_id : req.body.order_id,//here is the doubt is it foreign key?
+                                  customer_id : req.body.customer_id,
+                                  product_id: req.body.product_id,
+                                  product_quantity: req.body.product_quantity,
+                                  retailer_id: req.body.retailer_id,
+                                
+                                  date: req.body.date,
+                                  customer_otp:otp,
+                                  verified : '0',
+                                              };
+                                //  text=text.concat(otp);
+                                //  var demo={
+                                //     'message':text,
+                                //     'name':"vishweshsoni@gmail.com",
+                                //     'subject':"NOREPLY - OTP Verification for Placed Order"
+                                //  };
+                                //  demo.sendMail(demo,callback);
 
                      var query ="INSERT INTO order1 SET ?";
                      var table =[c];
@@ -420,35 +432,23 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                      });
                    });
             //insert into product data
-                             router.post("/product",function(req,res){
-                                 var c={
-                                 product_id : req.body.product_id,//here is the doubt is it foreign key?
-                                 product_name : req.body.product_name,
-                                 product_price : req.body.product_price,
-                                 product_color : req.body.product_color,
-                                 product_warranty : req.body.product_warranty,
-                                 product_specification: req.body.product_specification,
-                                 fk_category_id : req.body.fk_category_id,
-                                 product_img    :   req.body.product_img,
-                                             };
+                            //  router.post("/product",function(req,res){
+                            //      var c={
+                            //       order_id : req.body.order_id,//here is the doubt is it foreign key?
+                            //       customer_id : req.body.customer_id,
+                            //       product_id : req.body.product_id,
+                            //       product_quantity : req.body.product_quantity,
+                            //       date : req.body.date,
+                            //      product_specification: req.body.product_specification,
+                            //      customer_otp : req.body.customer_otp,
+                            //      verified    :   req.body.verified,
+                            //                  };
 
-                                 var query ="INSERT INTO product SET ?";
-                                 var table =[c];
-                                 query=mysql.format(query,table);
-                                 connection.query(query,function(error,results){
-                                   if(error){
-                                              res.json({"error":true,
-                                                        "message":"error executing the mysql query"});
-                                             console.log(error);
-
-                                           } else {
-                                             res.json({
-                                               "error": false,
-                                               "message": "Success",
-                                               "Results": results
-                                             });}
-                                 });
-                               });
+                            //      var query ="INSERT INTO order SET ?";
+                            //      var table =[c];
+                            //      query=mysql.format(query,table);
+                                
+                            //    });
 
              //insert into retailor data
               router.post("/retailer",function(req,res){
@@ -719,9 +719,8 @@ var table=[req.params.pin,req.params.id,req.params.id];
                            res.json(results);
                            }
                });
-             });
-
-
+             });;
+        
 
 
       }
