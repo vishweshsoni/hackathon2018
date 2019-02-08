@@ -806,10 +806,10 @@ var table=[req.params.pin,req.params.id,req.params.id];
                  });
                });
                //Zeel Pending api
-        router.get("/pendingorder/:cid",function(req,res){
-              var query ="select * from order1 where customer_id=? and verified=1 and varified_by_retailer=0";
+        router.get("/pendingorder/:rid",function(req,res){
+              var query ="select * from product as p join inventory as i on p.product_id=i.product_id join retailer as r on r.retailer_id=i.fk_retailer_id join order1 as o on o.product_id=i.product_id join user as u on u.user_id=o.customer_id where o.retailer_id=? and o.verified=0 and o.verified_by_retailer=1 "
               // SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1
-              var table=[req.params.cid];
+              var table=[req.params.rid];
               query= mysql.format(query,table);
               connection.query(query,function(error,results){
                 if(error){
@@ -843,7 +843,7 @@ var table=[req.params.pin,req.params.id,req.params.id];
         //shivani's orderservice post request
         router.post("/orderservice",function(req,res){
           var c={
-            order_s_id:req.body.order_s_id,
+            // order_s_id:req.body.order_s_id,
             customer_id: req.body.customer_id,
             retailer_id: req.body.retailer_id,
             price:req.body.price,
