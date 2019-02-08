@@ -130,25 +130,25 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                              }
                 });
       //get data from product table
-        router.get("/product",function(req,res){
-                       var query = "SELECT * FROM product";
-                       connection.query(query,function(error,results){
-                               if(error){
-                                   res.json({
-                                        "Error": true,
-                                        "Msg": "Error Executing Mysql Query",
-                                            });
-                                     Console.log(error);//logging error
-                               }else{
-                                   res.json({
-                                       "Error": false,
-                                       "Message":"Success",
-                                       "Data":results
+        // router.get("/product",function(req,res){
+        //                var query = "SELECT * FROM product";
+        //                connection.query(query,function(error,results){
+        //                        if(error){
+        //                            res.json({
+        //                                 "Error": true,
+        //                                 "Msg": "Error Executing Mysql Query",
+        //                                     });
+        //                              Console.log(error);//logging error
+        //                        }else{
+        //                            res.json({
+        //                                "Error": false,
+        //                                "Message":"Success",
+        //                                "Data":results
 
-                                   });
-                               }
-                       });
-                });
+        //                            });
+        //                        }
+        //                });
+        //         });
 
 
     //get data from order table
