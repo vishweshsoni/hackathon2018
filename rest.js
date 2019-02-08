@@ -267,7 +267,27 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                                       console.log(error);//logging error
                                                                 }else{
                                                                     res.json(results);
+                                                                }
+                                                        });
+                                                 });
 
+		//change password of user
+		
+			 router.put("/change/:id",function(req,res){
+                               var query = "UPDATE user SET user_password= ? , user_email=? WHERE user_id =?";
+							   console.log(req.body);
+							   console.log(req.params.id);
+                                   var table=[req.body.user_password,req.body.user_email,req.params.id];
+                                                        query= mysql.format(query,table);
+                                                        connection.query(query,function(error,results){
+                                                                if(error){
+                                                                    res.json({
+                                                                         "Error": true,
+                                                                         "Msg": "Error Executing Mysql Query",
+                                                                             });
+                                                                      console.log(error);//logging error
+                                                                }else{
+                                                                    res.json(results);
                                                                 }
                                                         });
                                                  });

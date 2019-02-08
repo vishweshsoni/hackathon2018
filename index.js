@@ -10,7 +10,7 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-app.use(cors);
+app.use(cors());
 const bodyparser = require("body-parser");
 const hostname = '127.0.0.1';
 function REST(){
