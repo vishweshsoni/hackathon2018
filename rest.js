@@ -131,7 +131,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                 });
       //get data from product table
         router.get("/product",function(req,res){
-                       var query = "SELECT * FROM product";
+                       var query = "SELECT * FROM category";
                        connection.query(query,function(error,results){
                                if(error){
                                    res.json({
@@ -267,7 +267,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                                     }
                                             });
                                      });
-              //past records
+              //past records url:"localhost:8110/pastrecords/1"
                   router.get("/pastrecords/:id",function(req,res){
   var query="select p.product_name,p.product_img,p.product_price * o.product_quantity,o.*,u.user_id from product p, order1 o,user u where customer_id = ? and o.product_id=p.product_id and u.user_id = o.customer_id";
                                   var table=[req.params.id];
@@ -788,6 +788,24 @@ var table=[req.params.pin,req.params.id,req.params.id];
           });
 
         });
+        //fenil's urgent query
+        router.get("/serviceprice/:id",function(req,res){
+          
+
+        var query ="select visiting_fees from service_man where retailer_id = ?";
+        var table=[req.params.id];
+        query=mysql.format(query,table);
+        connection.query(query,function(error,results){
+                 if(error){
+                            res.json({"error":true,
+                                      "message":"error executing the mysql query"});
+                           console.log(error);
+
+                         } else {
+                           res.json(results);
+                           }
+               });
+             });
         //Zeel Login api
         router.post("/zeellogin",function(req,res){
             var c={
