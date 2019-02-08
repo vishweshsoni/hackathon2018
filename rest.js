@@ -839,8 +839,33 @@ var table=[req.params.pin,req.params.id,req.params.id];
                       }
           });
 
-    });
-    
+        });
+        //shivani's orderservice post request
+        router.post("/orderservice",function(req,res){
+          var c={
+            order_s_id:req.body.order_s_id,
+            customer_id: req.body.customer_id,
+            retailer_id: req.body.retailer_id,
+            price:req.body.price,
+            // customer_otp:req.body.c
+            verified:0,
+            Address:req.body.Address,
+          }
+          var query ="insert into order_services set ?";
+          var table=[c];
+          query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                      res.json(results);
+                      }
+          });
+
+        });
 
       }
 module.exports = REST_ROUTER;
