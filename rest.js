@@ -988,7 +988,7 @@ connection.query(query,function(error,results){
           });
         }
         else {
-          var query ="select * from advertisement";
+          var query ="select * from advertisement order by advertisement_date desc";
           // var table=[req.params.advertisement_id];
           // query= mysql.format(query,table);
           connection.query(query,function(error,results){
@@ -1124,10 +1124,10 @@ connection.query(query,function(error,results){
                   } else {
                     res.json(results);
                     }
-        });
-        
-        
+        });               
       });
+
+
 
       }
 module.exports = REST_ROUTER;
