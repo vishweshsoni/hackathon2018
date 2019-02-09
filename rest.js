@@ -559,8 +559,8 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                 //login api
                 router.post("/loginAdmin",function(req,res){
 
-                  var  user_email = req.body.user_email;
-               var user_password = req.body.user_password;
+                  var  user_email = req.body.retailer_email;
+               var user_password = req.body.retailer_password;
    var query ="SELECT * FROM retailer WHERE retailer_email=? AND retailer_password=?";
    var table =[user_email,user_password];
    query=mysql.format(query,table);
