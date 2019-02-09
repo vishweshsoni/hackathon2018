@@ -964,10 +964,14 @@ connection.query(query,function(error,results){
         //Advertisement post request
         router.post("/adservice/",function(req,res){
             var c={
-
+                advertisement_id: req.body.advertisement_id,
+                advertisement_title: req.body.advertisement_title,
+                advertisement_img:req.body.advertisement_img,
+                advertisement_desc : req.body.advertisement_desc,
+                advertisement_date: req.body.advertisement_date,
             };
-          var query ="select * from advertisement where advertisement_id=?";
-          var table=[req.params.advertisement_id];
+          var query ="insert into advertisement set ?";
+          var table=[c];
           query= mysql.format(query,table);
           connection.query(query,function(error,results){
             if(error){
@@ -981,6 +985,24 @@ connection.query(query,function(error,results){
           });
 
         });
+        router.put("/adservice/:id",function(req,res){
+          
+        var query ="update table advertisement set advertisement_title=?,advertisement_img=?,advertisement_desc=?,advertisement_date=?";
+        var table=[req.body.advertisement_title,req.body.advertisement_img,req.body.advertisement_desc,req.body.advertisement_date];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
+
+      });
+
       
       }
 module.exports = REST_ROUTER;
