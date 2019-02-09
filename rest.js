@@ -571,6 +571,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                console.log(error);
 
              }
+
       else {      res.json(results);
 //                                       if(results.length>0){
 //                                            if(results[0].user_password == user_password){
@@ -1042,7 +1043,24 @@ connection.query(query,function(error,results){
                     }
         });
 
-      });
+      }); 
+      router.delete("/adservice/:id",function(req,res){
+          
+        var query ="delete from advertisement where advertisement_id=?";
+        var table=[req.params.id];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
+
+      }); 
 
       
       }
