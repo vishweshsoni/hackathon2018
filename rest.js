@@ -564,6 +564,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
    var query ="SELECT * FROM retailer WHERE retailer_email=? AND retailer_password=?";
    var table =[user_email,user_password];
    query=mysql.format(query,table);
+console.log(query);
    connection.query(query,function(error,results){
      if(error){
                 res.json({"error":true,
