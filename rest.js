@@ -458,7 +458,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                             //       customer_id : req.body.customer_id,
                             //       product_id : req.body.product_id,
                             //       product_quantity : req.body.product_quantity,
-                            //       date : req.body.date,
+                            //       date : req.body.date,product
                             //      product_specification: req.body.product_specification,
                             //      customer_otp : req.body.customer_otp,
                             //      verified    :   req.body.verified,
@@ -1080,7 +1080,52 @@ connection.query(query,function(error,results){
         
         
       });
+      // router.put("/updateretailerstatus/:orderid/:retailorid",function(req,res){
+          
+      //   var query ="updarew";
+      //   var table=[req.params.id];
+      //   query= mysql.format(query,table);
+      //   connection.query(query,function(error,results){
+      //     if(error){
+      //                res.json({"error":true,
+      //                          "message":"error executing the mysql query"});
+      //               console.log(error);
 
-      
+      //             } else {
+      //               res.json(results);
+      //               }
+      //   });
+        
+        
+      // });
+      //post method of product
+      router.post("/zeelproduct",function(req,res){
+          var c={
+            // product_id: 1, 
+            product_name: req.body.product_name,
+            product_price: req.body.product_price,
+            product_color: req.body.product_color,
+            product_warranty: req.body.product_warranty,
+            product_specification: req.body.product_specification,
+            fk_category_id: req.body.fk_category_id,
+            product_img: req.body.product_img,
+          };
+        var query ="insert into product set ?";
+        var table=[c];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
+        
+        
+      });
+
       }
 module.exports = REST_ROUTER;
