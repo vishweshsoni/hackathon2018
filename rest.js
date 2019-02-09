@@ -1080,24 +1080,26 @@ connection.query(query,function(error,results){
         
         
       });
-      // router.put("/updateretailerstatus/:orderid/:retailorid",function(req,res){
-          
-      //   var query ="updarew";
-      //   var table=[req.params.id];
-      //   query= mysql.format(query,table);
-      //   connection.query(query,function(error,results){
-      //     if(error){
-      //                res.json({"error":true,
-      //                          "message":"error executing the mysql query"});
-      //               console.log(error);
+      //update order by confirming the orderid
+      router.put("/updateretailerstatus/:orderid/:retailorid",function(req,res){
+          var varified_by_user=1;
+        var query ="update order1 set verified_by_retailer= ? where order_id= ? and retailer_id= ?";
 
-      //             } else {
-      //               res.json(results);
-      //               }
-      //   });
+        var table=[varified_by_user,req.params.orderid,req.params.retailorid];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
         
         
-      // });
+      });
       //post method of product
       router.post("/zeelproduct",function(req,res){
           var c={
