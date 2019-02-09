@@ -458,7 +458,7 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                             //       customer_id : req.body.customer_id,
                             //       product_id : req.body.product_id,
                             //       product_quantity : req.body.product_quantity,
-                            //       date : req.body.date,
+                            //       date : req.body.date,product
                             //      product_specification: req.body.product_specification,
                             //      customer_otp : req.body.customer_otp,
                             //      verified    :   req.body.verified,
@@ -572,6 +572,7 @@ console.log(query);
                console.log(error);
 
              }
+
       else {      res.json(results);
 //                                       if(results.length>0){
 //                                            if(results[0].user_password == user_password){
@@ -908,7 +909,7 @@ connection.query(query,function(error,results){
     });
         //Zeel admin side get retailor's past order
         router.get("/pastretailor/:rid",function(req,res){
-          var query ="SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1 and o.retailer_id=?";
+          var query ="SELECT * FROM retailer as r JOIN order1 as o on r.retailer_id=o.retailer_id join user as u on u.user_id=o.customer_id join product as p on p.product_id=o.product_id where o.verified=1 and o.retailer_id=?";
           var table=[req.params.rid];
           query= mysql.format(query,table);
           connection.query(query,function(error,results){
@@ -971,7 +972,7 @@ connection.query(query,function(error,results){
         });
 
         //Advertisement get api
-        router.get("/adservice/:advertisement_id",function(req,res){
+        router.get("/adservice/:advertisement_id?",function(req,res){
           if(req.params.advertisement_id){ 
           var query ="select * from advertisement where advertisement_id=?";
           var table=[req.params.advertisement_id];
@@ -988,7 +989,7 @@ connection.query(query,function(error,results){
           });
         }
         else {
-          var query ="select * from advertisement";
+          var query ="select * from advertisement order by advertisement_date desc";
           // var table=[req.params.advertisement_id];
           // query= mysql.format(query,table);
           connection.query(query,function(error,results){
@@ -1043,8 +1044,91 @@ connection.query(query,function(error,results){
                     }
         });
 
+      }); 
+      router.delete("/adservice/:id",function(req,res){
+          
+        var query ="delete from advertisement where advertisement_id=?";
+        var table=[req.params.id];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
+        
+        
+      });
+      router.get("/tobeaccepted/:id",function(req,res){
+          
+        var query ="select * from product as p join inventory as i on i.product_id=p.product_id join order1 as o on o.product_id=i.product_id join retailer as r on r.retailer_id=o.retailer_id where o.verified_by_retailer=0 AND o.retailer_id=?";
+        var table=[req.params.id];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
+        
+        
+      });
+      //update order by confirming the orderid
+      router.put("/updateretailerstatus/:orderid/:retailorid",function(req,res){
+          var varified_by_user=1;
+        var query ="update order1 set verified_by_retailer= ? where order_id= ? and retailer_id= ?";
+
+        var table=[varified_by_user,req.params.orderid,req.params.retailorid];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
+        
+        
+      });
+      //post method of product
+      router.post("/zeelproduct",function(req,res){
+          var c={
+            // product_id: 1, 
+            product_name: req.body.product_name,
+            product_price: req.body.product_price,
+            product_color: req.body.product_color,
+            product_warranty: req.body.product_warranty,
+            product_specification: req.body.product_specification,
+            fk_category_id: req.body.fk_category_id,
+            product_img: req.body.product_img,
+          };
+        var query ="insert into product set ?";
+        var table=[c];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });               
       });
 
-      
+
+
       }
 module.exports = REST_ROUTER;
