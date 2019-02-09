@@ -908,7 +908,7 @@ connection.query(query,function(error,results){
     });
         //Zeel admin side get retailor's past order
         router.get("/pastretailor/:rid",function(req,res){
-          var query ="SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1 and o.retailer_id=?";
+          var query ="SELECT * FROM retailer as r JOIN order1 as o on r.retailer_id=o.retailer_id join user as u on u.user_id=o.customer_id join product as p on p.product_id=o.product_id where o.verified=1 and o.retailer_id=?";
           var table=[req.params.rid];
           query= mysql.format(query,table);
           connection.query(query,function(error,results){
@@ -1061,7 +1061,25 @@ connection.query(query,function(error,results){
         });
         
         
-      }); 
+      });
+      router.get("/tobeaccepted/:id",function(req,res){
+          
+        var query ="select * from product as p join inventory as i on i.product_id=p.product_id join order1 as o on o.product_id=i.product_id join retailer as r on r.retailer_id=o.retailer_id where o.verified_by_retailer=0 AND o.retailer_id=?";
+        var table=[req.params.id];
+        query= mysql.format(query,table);
+        connection.query(query,function(error,results){
+          if(error){
+                     res.json({"error":true,
+                               "message":"error executing the mysql query"});
+                    console.log(error);
+
+                  } else {
+                    res.json(results);
+                    }
+        });
+        
+        
+      });
 
       
       }
