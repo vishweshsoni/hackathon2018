@@ -846,6 +846,24 @@ connection.query(query,function(error,results){
               });
 
         });
+
+        router.get("/pastorderretailer/:rid",function(req,res){
+          var query ="select * from product as p join inventory as i on p.product_id=i.product_id join retailer as r on r.retailer_id=i.fk_retailer_id join order1 as o on o.product_id=i.product_id join user as u on u.user_id=o.customer_id where o.retailer_id=? and o.verified=1 "
+
+          var table=[req.params.rid];
+          query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                      res.json(results);
+                      }
+          });
+
+    });
         //Zeel admin side get retailor's past order
         router.get("/pastretailor/:rid",function(req,res){
           var query ="SELECT r.*,o.* FROM retailer as r JOIN order1 as o WHERE r.retailer_id=o.retailer_id and o.verified=1 and o.retailer_id=?";
@@ -865,12 +883,14 @@ connection.query(query,function(error,results){
         });
         //shivani's orderservice post request
         router.post("/orderservice",function(req,res){
+          var otp=otpGenerator.generate(6, { upperCase: false, specialChars: false,alphabets:false });
+                                 console.log(otp);
           var c={
             // order_s_id:req.body.order_s_id,
             customer_id: req.body.customer_id,
             retailer_id: req.body.retailer_id,
             price:req.body.price,
-            // customer_otp:req.body.c
+            customer_otp:otp,
             verified:0,
             Address:req.body.Address,
           }
@@ -889,6 +909,78 @@ connection.query(query,function(error,results){
           });
 
         });
+        //zeels pending orderservice post request last query given by fenil
+        router.get("/pendingorderservice/:retailer_id",function(req,res){
+          
+          var query ="select * from order_services as p  join retailer as r on r.retailer_id=p.retailer_id join user as u on u.user_id=p.customer_id where p.retailer_id=? and p.verified=0 and p.verified_by_retailer=1 ";
+          var table=[req.params.retailer_id];
+          query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
 
+                    } else {
+                      res.json(results);
+                      }
+          });
+
+        });
+
+        //Advertisement get api
+        router.get("/adservice/:advertisement_id",function(req,res){
+          if(req.params.advertisement_id){ 
+          var query ="select * from advertisement where advertisement_id=?";
+          var table=[req.params.advertisement_id];
+          query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                      res.json(results);
+                      }
+          });
+        }
+        else {
+          var query ="select * from advertisement";
+          // var table=[req.params.advertisement_id];
+          // query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                      res.json(results);
+                      }
+          });
+        }
+        });
+        //Advertisement post request
+        router.post("/adservice/",function(req,res){
+            var c={
+
+            };
+          var query ="select * from advertisement where advertisement_id=?";
+          var table=[req.params.advertisement_id];
+          query= mysql.format(query,table);
+          connection.query(query,function(error,results){
+            if(error){
+                       res.json({"error":true,
+                                 "message":"error executing the mysql query"});
+                      console.log(error);
+
+                    } else {
+                      res.json(results);
+                      }
+          });
+
+        });
+      
       }
 module.exports = REST_ROUTER;
