@@ -557,6 +557,47 @@ REST_ROUTER.prototype.handelRoutes = function(router, connection, md5) {
                                       });
                                     });
                 //login api
+                router.post("/loginAdmin",function(req,res){
+
+                  var  user_email = req.body.user_email;
+               var user_password = req.body.user_password;
+   var query ="SELECT * FROM retailer WHERE retailer_email=? AND retailer_password=?";
+   var table =[user_email,user_password];
+   query=mysql.format(query,table);
+   connection.query(query,function(error,results){
+     if(error){
+                res.json({"error":true,
+                          "message":"error executing the mysql query"});
+               console.log(error);
+
+             }
+      else {      res.json(results);
+//                                       if(results.length>0){
+//                                            if(results[0].user_password == user_password){
+//                                                res.json({
+//                                                    "error" : false,
+//                                                    "message" : "Successfully Authentic",
+//                                                     "result" : results
+//                                                });
+//
+//                                            }
+//                                            else{
+//                                                res.json({
+//                                                        "error": true,
+//                                                         "Message": "Email and password does not match",
+//                                                    });
+//
+//                                            }
+//                                        }else{
+//                                            res.json({
+//                                                "error" : true,
+//                                                "Message" : "Email doesnot exist",
+//
+//                                            });
+//                                        }
+            }
+   });
+ });
                  router.post("/login",function(req,res){
 
                                     var  user_email = req.body.user_email;
