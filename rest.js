@@ -971,7 +971,7 @@ connection.query(query,function(error,results){
         });
 
         //Advertisement get api
-        router.get("/adservice/:advertisement_id",function(req,res){
+        router.get("/adservice/:advertisement_id?",function(req,res){
           if(req.params.advertisement_id){ 
           var query ="select * from advertisement where advertisement_id=?";
           var table=[req.params.advertisement_id];
